@@ -3585,11 +3585,6 @@ int mlx5_bind_mw(struct ibv_qp *qp, struct ibv_mw *mw,
 	struct ibv_send_wr *bad_wr = NULL;
 	int ret;
 
-	if (!bind_info->mr && (bind_info->addr || bind_info->length)) {
-		errno = EINVAL;
-		return errno;
-	}
-
 	if (bind_info->mw_access_flags & IBV_ACCESS_ZERO_BASED) {
 		errno = EINVAL;
 		return errno;
@@ -3603,11 +3598,6 @@ int mlx5_bind_mw(struct ibv_qp *qp, struct ibv_mw *mw,
 
 		if (to_mmr(bind_info->mr)->alloc_flags & IBV_ACCESS_ZERO_BASED) {
 			errno = EINVAL;
-			return errno;
-		}
-
-		if (mw->pd != bind_info->mr->pd) {
-			errno = EPERM;
 			return errno;
 		}
 	}
